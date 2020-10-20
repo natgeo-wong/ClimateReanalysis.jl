@@ -1,5 +1,10 @@
-struct Download <: AbstractAction end
-struct Analysis <: AbstractAction end
+struct Download <: AbstractAction
+    name :: AbstractString
+end
+
+struct Analysis <: AbstractAction
+    name :: AbstractString
+end
 
 """
     action(str::AbstractString)
@@ -15,13 +20,26 @@ Arguments:
 function action(action::AbstractString)
 
     if uppercase(action) == "DOWNLOAD"
-        return Download()
+        return Download("download")
     elseif any(uppercase(action),["ANALYSIS","ANALYZE","ANALYSE"])
-        return Analysis()
+        return Analysis("analyze")
     end
 
 end
 
+"""
+    defroot(path::AbstractString, action::AbstractAction) -> Dict
+
+Checks the path argument:
+    * If path string is empty (i.e. ""), then a path is created in the user homedir `~/research/reanalysis`.
+    * If path specified does not exist, then there are two possible outcomes:
+        (1) If `AbstractAction` Type is `Download`, then the path will be created where specified
+        (2) If `AbstractAction` Type is `Analysis`, then an error is thrown
+
+Arguments:
+    * `path :: AbstractString` : Directory path
+    * `action :: AbstractAction` : Type containing information on action to be taken on dataset
+"""
 function defroot(path::AbstractString, action::Download)
 
     if path == "";
@@ -58,6 +76,17 @@ function defroot(path::AbstractString, action::Analysis)
 
 end
 
+"""
+    mkroot(root::AbstractString, action::AbstractAction) -> Dict
+
+Define the reanalysis data and plotting directories, returned in the form of a dictionary with the following keywords
+    * `root :: String` : Path of the directory for the reanalysis dataset
+    * `plot :: String` : Path of the directory containing land-sea mask and other plotting backends
+
+Arguments:
+    * `root :: AbstractString` : Directory path
+    * `action :: AbstractAction` : Type containing information on action to be taken on dataset
+"""
 function mkroot(root::AbstractString, dataset::AbstractDataset)
 
     data = joinpath(root,dataset.prefix);
@@ -76,16 +105,38 @@ function mkroot(root::AbstractString, dataset::AbstractDataset)
 
 end
 
-function startup(action::Download, dataset::ERA5Dataset, path::AbstractString="")
+"""
+    startup(
+        action::AbstractAction,
+        dataset::AbstractDataset,
+        root::AbstractString=""
+    ) -> Dict
 
-    @info "$(now()) - This script will $(BOLD("DOWNLOAD ERA5")) reanalysis data."
+Startup the reanalysis data and plotting directories, returned in the form of a dictionary with the following keywords
+    * `root :: String` : Path of the directory for the reanalysis dataset
+    * `plot :: String` : Path of the directory containing land-sea mask and other plotting backends
+
+Arguments:
+    * `action :: AbstractAction` : Type containing information on action to be taken on dataset
+    * `dataset :: AbstractDataset` : Type containing information on reanalysis dataset
+    * `root :: AbstractString` : Directory path
+"""
+function startup(action::AbstractAction, dataset::AbstractDataset, path::AbstractString="")
+
+    @info "$(now()) - This script will $(BOLD(uppercase(action.name))) $(BOLD(uppercase(dataset.name))) reanalysis data."
     root = defroot(path,action,dataset)
 
+    @info "$(now()) - Setting up plotting directories and backends ..."
     plotsetup(root); #plotsubregion("GLB",root["plot"])
     return root
 
 end
 
+"""
+    welcome() -> IOStream
+
+Calls the welcome message for `ClimateReanalysis.jl`
+"""
 function welcome()
 
     ftext = joinpath(@__DIR__,"../extra/erawelcome.txt");
