@@ -139,7 +139,7 @@ Calls the welcome message for `ClimateReanalysis.jl`
 """
 function welcome()
 
-    ftext = joinpath(@__DIR__,"../extra/erawelcome.txt");
+    ftext = joinpath(@__DIR__,"../extra/welcome.txt");
     lines = readlines(ftext); count = 0; nl = length(lines);
     for l in lines; count += 1;
        if any(count .== [1,2]); print(Crayon(bold=true),"$l\n");
