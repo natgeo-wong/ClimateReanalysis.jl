@@ -1,0 +1,31 @@
+                                  ClimateReanalysis.jl
+                            Created by: Nathanael Zhixin Wong
+
+ClimateERA is a Julia package specifically designed to automate the downloading and
+analysis of reanalysis data.
+
+This package currently supports the following reanalysis datasets:
+      - ERA5 hourly data on single levels
+      - ERA5 hourly data on pressure levels
+      - ERA5 monthly-averaged data on single levels
+      - ERA5 monthly-averaged data on pressure levels
+      - ERA5 monthly-averaged hourly data on single levels
+      - ERA5 monthly-averaged hourly data on pressure levels
+      - ERA-Interim 6-hourly data on single levels
+      - ERA-Interim 6-hourly data on pressure levels
+
+Support for the following reanalysis datasets are planned:
+      - NCEP Reanalysis II data on pressure levels
+      - NCEP Reanalysis II data at surface
+      - NCEP Reanalysis II data on spectral grid
+      - NCEP Reanalysis II data on gaussian grid
+      - MERRA2 Reanalysis on pressure levels
+      - MERRA2 Reanalysis at surface
+
+ClimateERA.jl relies heavily on the following Julia dependencies.  Please check out their
+individual repositories / documentation for more information:
+      - GeoRegions.jl
+
+If you wish to contribute to ClimateERA.jl, please contact me at:
+      - nathanaelwong@fas.harvard.edu
+      - or you can also submit a pull-request if you've already created something!
