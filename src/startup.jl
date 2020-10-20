@@ -127,7 +127,7 @@ function startup(action::AbstractAction, dataset::AbstractDataset, path::Abstrac
     root = defroot(path,action,dataset)
 
     @info "$(now()) - Setting up plotting directories and backends ..."
-    plotsetup(root); #plotsubregion("GLB",root["plot"])
+    plotsetup(root["plot"]); plotsubregion("GLB",root["plot"])
     return root
 
 end

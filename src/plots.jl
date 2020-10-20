@@ -1,35 +1,25 @@
-function plotsetup(root::AbstractDict)
+function plotsetup(pdir::AbstractString)
 
-    pdir  = root["plot"]
-    ppys  = joinpath(root["plot"],"plot-lsm.py")
+    pfnc = joinpath(pdir,"plot-GLBx0.25-lsm.nc")
 
-    fID = open(ppys,"w");
-
-    write(fID,"#!/usr/bin/env python\n");
-    write(fID,"import cdsapi\n");
-    write(fID,"c = cdsapi.Client()\n\n");
-
-    write(fID,"c.retrieve(\"reanalysis-era5-single-levels\",\n");
-    write(fID,"    {\n");
-    write(fID,"        \"product_type\": \"reanalysis\",\n");
-    write(fID,"        \"variable\": \"land_sea_mask\",\n");
-    write(fID,"        \"year\": \"$(year(Dates.now()))\",\n");
-    write(fID,"        \"month\": \"01\",\n");
-    write(fID,"        \"day\": \"01\",\n");
-    write(fID,"        \"time\": \"00:00\",\n");
-    write(fID,"        \"format\": \"netcdf\",\n");
-    write(fID,"    },\n");
-    write(fID,"    \"plot-GLBx0.25-lsm.nc\")\n\n");
-    write(fID,"})\n\n");
+    # if !isfile(pfnc)
+        plsm = Dict(
+            "product_type" => "reanalysis",
+            "variable"     => "land_sea_mask",
+            "year"         => year(Dates.now()),
+            "month"        => 1,
+            "day"          => 1,
+            "time"         => "00:00",
+            "format"       => "netcdf"
+        )
+        retrieve(pfnc,"reanalysis-era5-single-levels",plsm)
+    # end
 
 end
 
 function plotsubregion(ID::AbstractString, pdir::AbstractString)
 
-    fnc = joinpath(pdir,"plot-GLBx0.25-lsm.nc");
-    if !isfile(fnc)
-        error("$(now()) - The Global Land-Sea Mask file \"eplot-GLBx0.25-lsm.nc\" does not exist in the folder $(eroot["plot"]). Please run the script \"plot-lsm.py\" in the folder to download the ERA5 Land-Sea Mask file.")
-    end
+    plotsetup(pdir::AbstractString)
 
     ds = NCDataset(fnc)
     lsm = ds["lsm"][:]*1; lon = ds["longitude"][:]*1; lat = ds["latitude"][:]*1
