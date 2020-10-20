@@ -1,20 +1,21 @@
 module ClimateReanalysis
 
-# Write your package code here.
-
-## Modules Used
-using Crayons.Box
-using CDSAPI
+## Base Modules Used
 using Dates
 using Logging
 using Printf
+
+## Modules Used
+using Crayons
+using Crayons.Box
 
 ## Exporting the following functions:
 export
         AbstractDataset, AbstractAction,
         action, startup, download,
         era5singledaily,
-        eraisingledaily
+        eraisingledaily,
+        plotsetup, plotsubregion
 
 ## Abstract types
 """
@@ -31,16 +32,13 @@ Abstract supertype for action to be taken on reanalysis datasets.
 """
 abstract type AbstractAction end
 
-## Including submodules
-include("ERA5/ERA5.jl")
-include("ERAI/ERAI.jl")
-
-## Reexporting functions from submodules
-using .ERA5
-using .ERAI
+## Load ClimateReanalysis Modules and Submodules
+include("ERA5/ERA5.jl"); using .ERA5
+include("ERAI/ERAI.jl"); using .ERAI
 
 ## Including other files in the module
 include("startup.jl")
+include("plots.jl")
 
 ## Run welcome message
 welcome()

@@ -1,23 +1,28 @@
 module ERA5
 
-# Write your package code here.
-
-## Modules Used
-using Crayons.Box
+## Base Modules Used
+using Base64
 using Dates
 using DelimitedFiles
-using GeoRegions
 using Logging
-using NCDatasets
 using Printf
 using Statistics
 
+## Modules Used
+using Crayons.Box
+using GeoRegions
+using HTTP
+using JSON
+using NCDatasets
+
+## Load ClimateReanalysis Modules and Submodules
 using ..ClimateReanalysis
 
 ## Exporting the following functions:
 export
         ERA5Dataset,
-        download, era5singledaily
+        download, retrieve,
+        era5singledaily
 
 ## Abstract types
 """
@@ -43,6 +48,7 @@ abstract type PressureDataset <: ERA5Dataset end
 
 ## Including other files in the module
 include("types.jl")
+include("cdsapi.jl")
 include("download.jl")
 
 end
