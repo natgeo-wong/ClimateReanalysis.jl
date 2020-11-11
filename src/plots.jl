@@ -2,18 +2,18 @@ function plotsetup(pdir::AbstractString)
 
     pfnc = joinpath(pdir,"plot-GLBx0.25-lsm.nc")
 
-    # if !isfile(pfnc)
+    if !isfile(pfnc)
         plsm = Dict(
             "product_type" => "reanalysis",
             "variable"     => "land_sea_mask",
-            "year"         => year(Dates.now()),
+            "year"         => year(now()),
             "month"        => 1,
             "day"          => 1,
             "time"         => "00:00",
             "format"       => "netcdf"
         )
-        retrieve(pfnc,"reanalysis-era5-single-levels",plsm)
-    # end
+        retrieve("reanalysis-era5-single-levels",plsm,pfnc)
+    end
 
 end
 
