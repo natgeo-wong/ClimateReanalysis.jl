@@ -1,9 +1,9 @@
 struct Download <: AbstractAction
-    name :: AbstractString
+    action :: AbstractString
 end
 
 struct Analysis <: AbstractAction
-    name :: AbstractString
+    action :: AbstractString
 end
 
 """
@@ -123,7 +123,7 @@ Arguments:
 """
 function startup(action::AbstractAction, dataset::AbstractDataset, path::AbstractString="")
 
-    @info "$(now()) - This script will $(BOLD(uppercase(action.name))) $(BOLD(uppercase(dataset.name))) reanalysis data."
+    @info "$(now()) - This script will $(BOLD(uppercase(action.action))) $(BOLD(uppercase(dataset.dataset))) reanalysis data."
     root = defroot(path,action,dataset)
 
     @info "$(now()) - Setting up plotting directories and backends ..."
