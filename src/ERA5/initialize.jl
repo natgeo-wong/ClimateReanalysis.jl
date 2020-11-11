@@ -14,7 +14,7 @@ are to be extracted from.  Functionalities include:
 function variablecopy(;overwrite::Bool=false)
 
     jfol = joinpath(DEPOT_PATH[1],"files/ClimateReanalysis/"); mkpath(jfol);
-    ftem = joinpath(@__DIR__,"../extra/variables_era5_template.txt")
+    ftem = joinpath(@__DIR__,"variables_era5_template.txt")
     fvar = joinpath(jfol,"variables_era5.txt")
 
     if !overwrite
@@ -59,7 +59,9 @@ function variableload(action::Download)
     allparams = readdlm(eravariablecopy(),',',comments=true);
 
     @debug "$(now()) - Filtering out variables that can only be analyzed but not downloaded ..."
-    modID = allparams[:,1]; return allparams[(modID.=="dsfc").+(modID.=="dpre"),:];
+    modID = allparams[:,1]; aID = replace.(replace.(modID,"sfc"=>""),"pre"=>"")
+
+    return allparams[aID.=="d",:];
 
 end
 
